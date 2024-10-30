@@ -4,6 +4,7 @@ WooCommerce Variation Thumbnails
 Description: Добавляет миниатюры изображений для вариативных товаров в WooCommerce.
 Author: Sharpeii
 * Для подключения используем require get_template_directory() . '/inc/woocommerce-variation-thumbnails.php';
+ * Файл из папки assets/js/variation-thumbnails.js перекладываем в одноименную папку темы
 */
 
 //Метаполя для миниатюр цветов
