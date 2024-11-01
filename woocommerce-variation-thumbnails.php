@@ -28,6 +28,7 @@ function add_variation_image_thumbnail_field($loop, $variation_data, $variation)
             <?php echo $image_url ? __('Изменить изображение', 'woocommerce') : __('Загрузить изображение', 'woocommerce'); ?>
         </button>
         <input
+                class="variation-image-thumbnail-field"
             type="hidden"
             id="variation_image_thumbnail_<?php echo $variation->ID; ?>"
             name="variation_image_thumbnail_<?php echo $variation->ID; ?>"
@@ -190,12 +191,21 @@ function variation_image_thumbnail_script(): void
                     multiple: false
                 }).on('select', function() {
                     const attachment = customUploader.state().get('selection').first().toJSON();
-                    inputField.val(attachment.id); // Устанавливаем ID изображения в скрытое поле
+                    inputField.val(attachment.id).trigger('change'); // Устанавливаем ID изображения в скрытое поле
                     button.text('Изменить изображение'); // Меняем текст кнопки
 
                     // Обновляем или добавляем превью изображения
-                    previewContainer.html('<img src="' + attachment.url + '" style="width: 60px; height: auto;" alt="img"/>');
+                    previewContainer.html('<img src="' + attachment.url + '" style="width: 60px; height: auto;" alt="" />');
+
+                    // Принудительно отмечаем изменения для активации кнопки "Сохранить изменения"
+                    $('#variable_product_options_inner').trigger('woocommerce_variations_input_changed');
                 }).open();
+            });
+            // Слушаем событие изменения в поле миниатюры
+            $('.variation-image-thumbnail-field').on('change', function() {
+                console.log('Field changed'); // Проверка, вызывается ли событие
+                // Принудительно активируем кнопку "Сохранить изменения"
+                $('#variable_product_options_inner').trigger('woocommerce_variations_input_changed');
             });
         });
     </script>
